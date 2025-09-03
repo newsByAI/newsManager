@@ -20,8 +20,8 @@ class VectorStore:
 
         datapoints = [
             {
-                "id": article_id,
                 "feature_vector": vector,
+                "metadata": {"article_id": article_id}
             }
             for vector in vectors
         ]

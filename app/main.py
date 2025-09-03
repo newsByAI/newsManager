@@ -52,16 +52,13 @@ def get_articles_from_source(source: str, q: str):
         # 5. Must create chunks and store them in the vector store and store the IDs to then use them.
 
 
-        chunker = DocumentChunker(strategy=SemanticChunkingStrategy())
-        
-        print("Initializing vector store...")
-        
+        chunker = DocumentChunker(strategy=SemanticChunkingStrategy())    
         vector_store = VectorStore()
         
         for id, article in id_to_article.items():
-            chunks = chunker.chunk(article.content)
-            print(f"Article ID {id} chunked into {len(chunks)} chunks.")
-            vector_store.vectorize_and_store(id, chunks)        
+            chunks = chunker.chunk(article)
+            print(f"Chunked article ID {id} into {len(chunks)} chunks.")
+            #vector_store.vectorize_and_store(id, chunks)        
     
         return articles
     except ValueError as e:

@@ -13,5 +13,4 @@ class DocumentChunker:
         """
         Chunks the content of an article using the configured strategy.
         """
-        print(f"Starting chunking process for article: '{article.title[:30]}...'")
         return self._strategy.chunk(article.content)
