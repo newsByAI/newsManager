@@ -21,7 +21,7 @@ def main():
     Jugadores como Lionel Messi, Cristiano Ronaldo y Neymar son íconos mundiales.
     """
     
-    results = strategy.chunk_and_vectorize(text)
+    results = strategy.chunk(text)
     print(results)
 
 if __name__ == "__main__":

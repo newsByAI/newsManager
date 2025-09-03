@@ -8,8 +8,8 @@ class ChunkingStrategy(ABC):
     @abstractmethod
     def chunk(self, text: str) -> List[str]:
         pass
-
-class SemanticChunkingStrategy:
+    
+class SemanticChunkingStrategy(ChunkingStrategy):
     """
     Semantic chunking + embedding generation in one step.
     Returns both chunks and their embeddings so they are ready for indexing.
@@ -19,12 +19,11 @@ class SemanticChunkingStrategy:
         self.embeddings = clients.embeddings_client
         self.text_splitter = clients.semantic_chunker
 
-    def chunk_and_vectorize(self, text: str) -> List:
+    def chunk(self, text: str) -> List[str]:
         """
-        Splits text into semantic chunks and generates embeddings for each chunk.
+        Splits text into semantic chunks.
         """
-
         documents = self.text_splitter.create_documents([text])
-        chunks = [doc.page_content for doc in documents]
+        return [doc.page_content for doc in documents]
 
-        return chunks
+
