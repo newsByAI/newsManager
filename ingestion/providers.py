@@ -7,6 +7,7 @@ from typing import List
 from datetime import date
 from .models import Article
 from dotenv import load_dotenv
+from cleaning.cleaner import Cleaner
 
 # Load environment variables from .env file
 load_dotenv()
@@ -75,6 +76,8 @@ class CoreApiAdapter(NewsProvider):
         if not self.api_key:
             raise ValueError("CORE_API_KEY environment variable not set.")
         self.base_url = "https://api.core.ac.uk/v3/search/works"
+        self.cleaner = Cleaner()
+
 
     def fetch_articles(self, query: str) -> List[Article]:
         print(f"Searching for '{query}' using CORE API...")
@@ -87,7 +90,7 @@ class CoreApiAdapter(NewsProvider):
         
         params = {
             "q": search_query,
-            "limit": 2  
+            "limit": 1  
         }
 
         try:
@@ -103,14 +106,17 @@ class CoreApiAdapter(NewsProvider):
             if not raw_article.get("title") or not raw_article.get("downloadUrl"):
                 continue
             
+            raw_content = raw_article.get("content", "")
+            cleaned_content = self.cleaner.clean(raw_content)
+
             articles.append(
                 Article(
                     title=raw_article.get("title"),
-                    url=raw_article.get("downloadUrl"), 
-                    source_name=raw_article.get("publisher", "N/A"), 
-                    published_at=raw_article.get("publishedDate"),
-                    content=raw_article.get("fullText"), 
-                    content_preview=raw_article.get("abstract") 
+                    url=raw_article.get("url"),
+                    content=raw_content, 
+                    source_name=raw_article.get("source", {}).get("name"),
+                    published_at=raw_article.get("publishedAt"),
+                    content_preview=raw_article.get("description")
                 )
             )
         return articles
