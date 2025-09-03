@@ -1,14 +1,7 @@
-from abc import ABC, abstractmethod
-from typing import List   
-from langchain_experimental.text_splitter import SemanticChunker
-from langchain_google_vertexai import VertexAIEmbeddings
-from services.ai_clients import AIClientsSingleton
-class ChunkingStrategy(ABC):
-    """Abstract base class for all chunking strategies."""
-    @abstractmethod
-    def chunk(self, text: str) -> List[str]:
-        pass
-    
+from services.ai_clients import AIClientsSingleton    
+from strategies.strategy_i import ChunkingStrategy
+from typing import List
+
 class SemanticChunkingStrategy(ChunkingStrategy):
     """
     Semantic chunking + embedding generation in one step.
@@ -25,5 +18,4 @@ class SemanticChunkingStrategy(ChunkingStrategy):
         """
         documents = self.text_splitter.create_documents([text])
         return [doc.page_content for doc in documents]
-
 

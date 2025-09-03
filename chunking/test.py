@@ -1,5 +1,5 @@
 # main.py
-from chunking.strategies import SemanticChunkingStrategy  # asumiendo que guardaste tu estrategia en chunking.py
+from chunking.strategies.strategy_i import SemanticChunkingStrategy  # asumiendo que guardaste tu estrategia en chunking.py
 
 
 def main():

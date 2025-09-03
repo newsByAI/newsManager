@@ -1,5 +1,5 @@
 from typing import List
-from .strategies import ChunkingStrategy
+from .strategies.strategy_i import ChunkingStrategy
 from ingestion.models import Article
 
 class DocumentChunker:
