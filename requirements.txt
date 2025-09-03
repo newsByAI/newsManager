@@ -9,3 +9,6 @@ langchain-experimental
 langchain-google-vertexai
 sqlalchemy
 psycopg2-binary
+perigon
+eventregistry
+dotenv
