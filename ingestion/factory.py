@@ -1,11 +1,12 @@
 # Implements simple Factory Pattern for News Providers creation based on a string key.
 
 from typing import Type, Dict
-from .providers import NewsProvider, NewsApiAdapter
+from .providers import NewsProvider, NewsApiAdapter, CoreApiAdapter
 
 class NewsProviderFactory:
     _providers: Dict[str, Type[NewsProvider]] = {
         "newsapi": NewsApiAdapter,
+        "core" : CoreApiAdapter
     }
 
     @classmethod
