@@ -3,9 +3,7 @@ import requests
 from typing import List
 from datetime import date
 from ingestion.models import Article
-from dotenv import load_dotenv
 from ingestion.providers.provider_i import NewsProvider
-from cleaning.cleaner import Cleaner
 
 class NewsApiAdapter(NewsProvider):
     """Adapter for the newsapi.org API that makes a real API call."""
