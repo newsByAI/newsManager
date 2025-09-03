@@ -49,8 +49,8 @@ def get_articles_from_source(source: str, q: str):
         id_to_article = {id: article for id, article in zip(articles_ids, clean_articles)}
         
         print(f"Stored {len(articles_ids)} articles in the database with IDs: {articles_ids}")
+        
         # 5. Must create chunks and store them in the vector store and store the IDs to then use them.
-
 
         chunker = DocumentChunker(strategy=SemanticChunkingStrategy())    
         vector_store = VectorStore()
@@ -58,7 +58,7 @@ def get_articles_from_source(source: str, q: str):
         for id, article in id_to_article.items():
             chunks = chunker.chunk(article)
             print(f"Chunked article ID {id} into {len(chunks)} chunks.")
-            #vector_store.vectorize_and_store(id, chunks)        
+            vector_store.vectorize_and_store(id, chunks)        
     
         return articles
     except ValueError as e:
