@@ -1,8 +1,8 @@
 
 from fastapi import FastAPI, HTTPException
 from typing import List
-from .factory import NewsProviderFactory
-from .models import Article
+from ingestion.factory import NewsProviderFactory
+from ingestion.models import Article
 
 app = FastAPI(
     title="News Ingestion Service",
