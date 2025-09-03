@@ -1,5 +1,5 @@
 from services.ai_clients import AIClientsSingleton    
-from strategies.strategy_i import ChunkingStrategy
+from chunking.strategies.strategy_i import ChunkingStrategy
 from typing import List
 
 class SemanticChunkingStrategy(ChunkingStrategy):

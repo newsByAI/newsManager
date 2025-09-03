@@ -5,7 +5,6 @@ from datetime import date
 from ingestion.models import Article
 from dotenv import load_dotenv  
 from ingestion.providers.provider_i import NewsProvider
-from cleaning.cleaner import Cleaner
 
 load_dotenv()
 class CoreApiAdapter(NewsProvider):
@@ -16,7 +15,6 @@ class CoreApiAdapter(NewsProvider):
         if not self.api_key:
             raise ValueError("CORE_API_KEY environment variable not set.")
         self.base_url = "https://api.core.ac.uk/v3/search/works"
-        self.cleaner = Cleaner()
 
 
     def fetch_articles(self, query: str) -> List[Article]:
@@ -40,20 +38,20 @@ class CoreApiAdapter(NewsProvider):
         except requests.exceptions.RequestException as e:
             print(f"Error calling CORE API: {e}")
             return []
-        print(data.get("results", []))
+        
+        
         articles = []
         for raw_article in data.get("results", []):
             if not raw_article.get("title") or not raw_article.get("downloadUrl"):
                 continue
             
             raw_content = raw_article.get("fullText", "")
-            cleaned_content = self.cleaner.clean(raw_content)
 
             articles.append(
                 Article(
                     title=raw_article.get("title"),
                     url=raw_article.get("url"),
-                    content=cleaned_content, 
+                    content=raw_content, 
                     published_at=raw_article.get("publishedDate"),
                     content_preview=raw_article.get("abstract")
                 )

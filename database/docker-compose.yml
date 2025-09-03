@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: news_postgres
+    environment:
+      POSTGRES_USER: news_user
+      POSTGRES_PASSWORD: news_pass
+      POSTGRES_DB: news_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - news_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: news_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin_pass
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmindata:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - news_network
+
+volumes:
+  pgdata:
+  pgadmindata:
+
+networks:
+  news_network:
+    driver: bridge
