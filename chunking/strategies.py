@@ -28,7 +28,7 @@ class SemanticChunkingStrategy:
             breakpoint_threshold_type="percentile"
         )
 
-    def chunk_and_vectorize(self, text: str) -> List[Dict]:
+    def chunk_and_vectorize(self, text: str) -> List:
         """
         Splits text into semantic chunks and generates embeddings for each chunk.
         
@@ -39,11 +39,5 @@ class SemanticChunkingStrategy:
         documents = self.text_splitter.create_documents([text])
         chunks = [doc.page_content for doc in documents]
 
-        vectors = self.embeddings.embed_documents(chunks)
-        
-        results = [
-            {"chunk": chunk, "vector": vector}
-            for chunk, vector in zip(chunks, vectors)
-        ]
 
-        return results
+        return chunks

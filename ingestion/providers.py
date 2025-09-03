@@ -61,7 +61,6 @@ class NewsApiAdapter(NewsProvider):
                     title=raw_article.get("title"),
                     content=raw_article.get("content"),
                     url=raw_article.get("url"),
-                    source_name=raw_article.get("source", {}).get("name"),
                     published_at=raw_article.get("publishedAt"),
                     content_preview=raw_article.get("description")
                 )
@@ -100,23 +99,22 @@ class CoreApiAdapter(NewsProvider):
         except requests.exceptions.RequestException as e:
             print(f"Error calling CORE API: {e}")
             return []
-
+        print(data.get("results", []))
         articles = []
         for raw_article in data.get("results", []):
             if not raw_article.get("title") or not raw_article.get("downloadUrl"):
                 continue
             
-            raw_content = raw_article.get("content", "")
+            raw_content = raw_article.get("fullText", "")
             cleaned_content = self.cleaner.clean(raw_content)
 
             articles.append(
                 Article(
                     title=raw_article.get("title"),
                     url=raw_article.get("url"),
-                    content=raw_content, 
-                    source_name=raw_article.get("source", {}).get("name"),
-                    published_at=raw_article.get("publishedAt"),
-                    content_preview=raw_article.get("description")
+                    content=cleaned_content, 
+                    published_at=raw_article.get("publishedDate"),
+                    content_preview=raw_article.get("abstract")
                 )
             )
         return articles

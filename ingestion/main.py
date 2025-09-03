@@ -16,7 +16,7 @@ news_factory = NewsProviderFactory()
 def get_articles_from_source(source: str, q: str):
     """
     Fetches articles from a specific source based on a query.
-    - **source**: Identifier for the source (e.g., 'newsapi', 'theguardian').
+    - **source**: Identifier for the source (e.g., 'newsapi')
     - **q**: The search term.
     """
     try:
