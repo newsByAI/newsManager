@@ -45,6 +45,7 @@ class VectorStore:
             {"chunk": chunk, "vector": vector, "vector_id": vector_id}
             for chunk, vector, vector_id in zip(chunks, vectors, generated_ids)
         ]
+        
     def search_similar(self, query: str, k: int = 10) -> Dict[str, Any]:
         """
         Searches for 'K' articles similar to the given query.
@@ -65,20 +66,42 @@ class VectorStore:
 
         neighbors = response[0]
 
-        article_ids = set()
+        # storage the best distance per article
+        article_distances = {}  
         for neighbor in neighbors:
-            raw_id = neighbor.id  # ej: "32/843b26d7-0dd2-4157-96fa-22f076524a85"
+            raw_id = neighbor.id  #Based on the defined id structure: ex."32/843b26d7-0dd2-4157-96fa-22f076524a85"
             if raw_id and "/" in raw_id:
-                article_id = raw_id.split("/")[0]  
+                article_id = raw_id.split("/")[0]
                 if article_id.isdigit():
-                    article_ids.add(int(article_id))
+                    aid = int(article_id)
+                    if aid not in article_distances or neighbor.distance < article_distances[aid]:
+                        article_distances[aid] = neighbor.distance
 
-        print(f"Quantity of unique articles found: {len(article_ids)}")
-        print(f"Article IDs: {article_ids}")
+        print(f"Quantity of unique articles found: {len(article_distances)}")
+        print(f"Article IDs: {list(article_distances.keys())}")
 
+        # --- Fetch articles from the database ---
         db = DatabaseManager()
-        articles = {a.id: a for a in (db.get_article_by_id(aid) for aid in article_ids) if a is not None}
-        
-        
+        articles = {
+            a.id: a for a in (db.get_article_by_id(aid) for aid in article_distances.keys())
+            if a is not None
+        }
 
-        return {"query": query, "results": articles}
+        
+        results = []
+        for aid, article in articles.items():
+            results.append({
+                "id": article.id,
+                "title": article.title,
+                "url": article.url,
+                "published_at": article.published_at,
+                "content_preview": article.content_preview,
+                "distance": article_distances.get(aid)  
+            })
+
+        results.sort(key=lambda x: x["distance"])
+
+        return {
+            "query": query,
+            "results": results[:k]  
+        }
