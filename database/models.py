@@ -13,4 +13,4 @@ class ArticleModel(Base):
     content_preview = Column(Text)
 
     def __repr__(self):
-        return f"<Article(id={self.id}, title='{self.title[:30]}...')>"
+        return f"<Article(id={self.id}, title='{self.title[:30]}...')>" 

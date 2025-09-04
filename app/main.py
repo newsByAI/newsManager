@@ -65,3 +65,14 @@ def get_articles_from_source(source: str, q: str):
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An internal error occurred: {e}")
+    
+@app.get("/api/v1/search")
+def search_articles(q: str):
+    """
+    Endpoint to perform semantic search over stored articles.
+    """
+    try:
+        vector_store = VectorStore()
+        return vector_store.search_similar(q, k=10)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in semantic search: {e}")
