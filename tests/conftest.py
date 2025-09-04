@@ -1,7 +1,13 @@
 # conftest.py
 def pytest_configure(config):
-    config.addinivalue_line("markers", "unit: pruebas unitarias rápidas y aisladas")
+    config.addinivalue_line(
+        "markers", "unit: Unit tests that do not require external services"
+    )
     config.addinivalue_line(
         "markers",
-        "integration: pruebas de integración que pueden tocar servicios externos",
+        "integration: Testing for integration with external services",
+    )
+    config.addinivalue_line(
+        "markers",
+        "llm_eval: LLM judge for chunking quality",
     )

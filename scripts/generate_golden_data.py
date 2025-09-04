@@ -73,14 +73,16 @@ def generate_golden_files():
     chunker = DocumentChunker(strategy=SemanticChunkingStrategy())
 
     # 3. Definir el directorio de salida y crearlo si no existe
-    output_dir = os.path.join(os.path.dirname(__file__), "..", "tests", "data")
+    output_dir = os.path.join(
+        os.path.dirname(__file__), "..", "tests", "data", "goldenData"
+    )
     os.makedirs(output_dir, exist_ok=True)
     print(f"📂 Directorio de salida verificado: {output_dir}")
 
     # 4. Procesar el artículo corto
     print("Processing short article...")
     short_chunks = chunker.chunk(short_article)
-    short_output_path = os.path.join(output_dir, "short_article_golden_data.json")
+    short_output_path = os.path.join(output_dir, "1-short_article_golden_data.json")
     with open(short_output_path, "w", encoding="utf-8") as f:
         json.dump(short_chunks, f, ensure_ascii=False, indent=4)
     print(f"✅ Archivo de chunks cortos guardado en: {short_output_path}")
@@ -88,7 +90,7 @@ def generate_golden_files():
     # 5. Procesar el artículo largo
     print("\nProcessing long article...")
     long_chunks = chunker.chunk(long_article)
-    long_output_path = os.path.join(output_dir, "long_article_golden_data.json")
+    long_output_path = os.path.join(output_dir, "1-long_article_golden_data.json")
     with open(long_output_path, "w", encoding="utf-8") as f:
         json.dump(long_chunks, f, ensure_ascii=False, indent=4)
     print(f"✅ Archivo de chunks largos guardado en: {long_output_path}")

@@ -6,11 +6,13 @@ from chunking.chunker import DocumentChunker
 from chunking.strategies.semantic import SemanticChunkingStrategy
 from ingestion.models import Article
 from datetime import date
+from services.evaluation_client import ChunkingEvaluator
 
-# --- PARTE 1: Función Auxiliar para Descubrir los Casos de Prueba ---
+
+MINIMUM_ACCEPTABLE_SCORE = 4
+
+
 # Esta función busca automáticamente todos los pares de archivos (artículo y golden data).
-
-
 def find_snapshot_test_cases():
     """
     Escanea los directorios 'articles' y 'goldenData' para encontrar
@@ -171,3 +173,46 @@ def test_pipeline_functional_with_mocks(sample_article):
         # ¿El resultado final es el que esperábamos del mock?
         assert result_chunks == expected_chunks
         print("✅ Prueba unitaria del pipeline superada.")
+
+
+@pytest.mark.integration
+@pytest.mark.llm_eval  # Una nueva marca para poder ejecutar solo estas pruebas
+@pytest.mark.parametrize("article_path", find_all_articles())
+def test_llm_evaluation_of_chunking(article_path):
+    """
+    Prueba la calidad del chunking utilizando un LLM como juez.
+    """
+    print(f"\n🔬 Iniciando evaluación con LLM para: {os.path.basename(article_path)}")
+
+    with open(article_path, "r", encoding="utf-8") as f:
+        article_content = f.read()
+
+    article = Article(
+        content=article_content,
+        title="Test Title",
+        url="http://example.com",
+        published_at=date.today().isoformat(),
+        content_preview="",
+    )
+
+    # 1. Genera los chunks como lo harías normalmente
+    chunker = DocumentChunker(strategy=SemanticChunkingStrategy())
+    chunks_to_evaluate = chunker.chunk(article)
+
+    # 2. Llama al servicio de evaluación
+    evaluator = ChunkingEvaluator()
+    evaluation_result = evaluator.evaluate_chunks(chunks_to_evaluate)
+
+    # Imprime el resultado para una fácil depuración
+    print(
+        f"📝 Resultado de la Evaluación: Puntuación={evaluation_result.get('score')}, Razón='{evaluation_result.get('reasoning')}'"
+    )
+
+    # 3. Compara la puntuación con el umbral
+    score = evaluation_result.get("score", 0)
+    reasoning = evaluation_result.get("reasoning", "No se proporcionó una razón.")
+
+    assert score >= MINIMUM_ACCEPTABLE_SCORE, (
+        f"La evaluación del LLM no superó el umbral de {MINIMUM_ACCEPTABLE_SCORE}. "
+        f"Puntuación recibida: {score}. Razón: '{reasoning}'"
+    )
