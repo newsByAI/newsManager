@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   postgres:
     image: postgres:15
@@ -10,7 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - news_network
 
@@ -29,6 +31,24 @@ services:
     networks:
       - news_network
 
+  app:
+    image: news:latest
+    container_name: news_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://news_user:news_pass@postgres:5432/news_db
+      GOOGLE_APPLICATION_CREDENTIALS: /app/keys/key.json
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - news_network
+    volumes:
+      - ./key.json:/app/keys/key.json:ro
+
 volumes:
   pgdata:
   pgadmindata:
@@ -36,3 +56,4 @@ volumes:
 networks:
   news_network:
     driver: bridge
+

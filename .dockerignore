@@ -1,0 +1,31 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.csv
+*.tsv
+*.parquet
+
+# Virtual envs
+venv/
+
+
+# Git
+.git
+.gitignore
+
+# Byte-compiled / optimized / DLL files
+*.so
+*.dll
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database files
+database/docker-compose.yml
+database/init.sql
+docker-compose.yml
