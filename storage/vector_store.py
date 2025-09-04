@@ -66,7 +66,7 @@ class VectorStore:
         # storage the best distance per article
         article_distances = {}  
         for neighbor in neighbors:
-            raw_id = neighbor.id  #Based on the defined id structure: ex."32/843b26d7-0dd2-4157-96fa-22f076524a85"
+            raw_id = neighbor.id  #Based on the defined id structure: ex."32/843b26d7-0dd2-4157-96fa-22f076524a85" where 32 is the article id
             if raw_id and "/" in raw_id:
                 article_id = raw_id.split("/")[0]
                 if article_id.isdigit():
