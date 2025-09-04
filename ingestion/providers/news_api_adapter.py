@@ -4,6 +4,8 @@ from typing import List
 from datetime import date
 from ingestion.models import Article
 from ingestion.providers.provider_i import NewsProvider
+from dotenv import load_dotenv
+
 
 class NewsApiAdapter(NewsProvider):
     """Adapter for the newsapi.org API that makes a real API call."""
@@ -19,10 +21,10 @@ class NewsApiAdapter(NewsProvider):
 
         params = {
             "q": query,
-            "from": date.today().isoformat(), 
+            "from": date.today().isoformat(),
             "sortBy": "popularity",
             "apiKey": self.api_key,
-            "language": "en" 
+            "language": "en",
         }
 
         try:
@@ -33,20 +35,19 @@ class NewsApiAdapter(NewsProvider):
             print(f"Error calling NewsAPI: {e}")
             return []
 
-        
         articles = []
         for raw_article in data.get("articles", []):
-        
+
             if not raw_article.get("title") or not raw_article.get("url"):
                 continue
-            
+
             articles.append(
                 Article(
                     title=raw_article.get("title"),
                     content=raw_article.get("content"),
                     url=raw_article.get("url"),
                     published_at=raw_article.get("publishedAt"),
-                    content_preview=raw_article.get("description")
+                    content_preview=raw_article.get("description"),
                 )
             )
         return articles

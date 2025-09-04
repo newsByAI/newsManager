@@ -4,11 +4,16 @@ from typing import Type, Dict
 from ingestion.providers.provider_i import NewsProvider
 from ingestion.providers.news_api_adapter import NewsApiAdapter
 from ingestion.providers.core_api_adapter import CoreApiAdapter
+from ingestion.providers.perigon_adapter import PerigonAdapter
+from ingestion.providers.news_ai_api_adapter import NewsAiApiAdapter
+
 
 class NewsProviderFactory:
     _providers: Dict[str, Type[NewsProvider]] = {
         "newsapi": NewsApiAdapter,
-        "core" : CoreApiAdapter
+        "core": CoreApiAdapter,
+        "news-ai": NewsAiApiAdapter,
+        "perigon": PerigonAdapter,
     }
 
     @classmethod
