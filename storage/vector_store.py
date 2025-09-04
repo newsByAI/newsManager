@@ -46,7 +46,7 @@ class VectorStore:
             for chunk, vector, vector_id in zip(chunks, vectors, generated_ids)
         ]
         
-    def search_similar(self, query: str, k: int = 10) -> Dict[str, Any]:
+    def search_similar(self, query: str, k: int = 100) -> Dict[str, Any]:
         """
         Searches for 'K' articles similar to the given query.
         """
@@ -58,9 +58,6 @@ class VectorStore:
             queries=[query_embedding],
             num_neighbors=k
         )
-
-        print(f"Search response: {response}")
-
         if not response or not response[0]:
             return {"query": query, "results": []}
 

@@ -24,13 +24,12 @@ class PerigonAdapter(NewsProvider):
 
         try:
             response = api.search_articles(
-                q=query, language="en", var_from=date.today().isoformat(), size=5
+                q=query, language="en", var_from=date.today().isoformat(), size=1
             )
         except Exception as e:
             print(f"Error calling NewsAPI: {e}")
             return []
 
-        print(response.articles[0].title)
         articles = []
 
         for raw_article in response.articles:

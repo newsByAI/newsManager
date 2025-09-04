@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from .models import Base, ArticleModel
 from ingestion.models import Article as ArticleSchema 
 from dotenv import load_dotenv
+from typing import Optional
 
 load_dotenv()
 
@@ -34,6 +35,10 @@ class DatabaseManager:
         """
         db = self.SessionLocal()
         try:
+            existing_article = db.query(ArticleModel).filter(ArticleModel.title == article_data.title).first()
+            if existing_article:
+                print(f"Article with title '{article_data.title[:50]}...' already exists. Skipping.")
+                return None 
             new_article = ArticleModel(
                 title=article_data.title,
                 url=article_data.url,
@@ -48,7 +53,8 @@ class DatabaseManager:
         finally:
             db.close()
 
-    def get_article_by_id(self, article_id: int) -> ArticleModel:
+      
+    def get_article_by_id(self, article_id: int) -> Optional[ArticleModel]:
         """
         Retrieves an article by its primary key ID.
         """
@@ -56,4 +62,16 @@ class DatabaseManager:
         try:
             return db.query(ArticleModel).filter(ArticleModel.id == article_id).first()
         finally:
-            db.close()      
+            db.close()
+
+    def article_exists_by_title(self, title: str) -> bool:
+        """
+        Checks if an article with the given title already exists in the database.
+        Returns True if it exists, False otherwise.
+        """
+        db = self.SessionLocal()
+        try:
+            existing_article = db.query(ArticleModel).filter(ArticleModel.title == title).first()
+            return existing_article is not None
+        finally:
+            db.close()
