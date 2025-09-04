@@ -20,7 +20,7 @@ class DatabaseManager:
             db_user = os.getenv("POSTGRES_USER", "news_user")
             db_pass = os.getenv("POSTGRES_PASSWORD", "news_pass")
             db_name = os.getenv("POSTGRES_DB", "news_db")
-            db_host = "localhost" 
+            db_host = "postgres" 
             
             database_url = f"postgresql+psycopg2://{db_user}:{db_pass}@{db_host}:5432/{db_name}"
             

@@ -40,7 +40,7 @@ class CoreApiAdapter(NewsProvider):
                 continue
 
             raw_content = raw_article.get("fullText", "")
-
+            print(raw_content)
             articles.append(
                 Article(
                     title=raw_article.get("title"),

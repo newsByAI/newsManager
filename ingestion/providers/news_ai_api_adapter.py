@@ -46,9 +46,9 @@ class NewsAiApiAdapter(NewsProvider):
             # The SDK returns a generator, so we iterate through it
             response_articles = q.execQuery(
                 self.er_client,
-                sortBy="date",  # Sort by publication date
-                sortByAsc=False,  # Get the newest articles first
-                maxItems=5,  # Limit the results to 5
+                sortBy="date",  
+                sortByAsc=False, 
+                maxItems=1,  
             )
 
             for raw_article in response_articles:
@@ -56,13 +56,13 @@ class NewsAiApiAdapter(NewsProvider):
                 if not raw_article.get("title") or not raw_article.get("url"):
                     continue
                 # Map the fields from the API response to our internal Article model
+                print(raw_article.content)
                 articles.append(
                     Article(
                         title=raw_article.get("title"),
                         content=raw_article.get("body"),
                         url=raw_article.get("url"),
                         published_at=raw_article.get("dateTime"),
-                        # Using 'body' as a fallback since no separate 'description' is provided
                         content_preview=raw_article.get("body"),
                     )
                 )

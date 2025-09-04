@@ -33,10 +33,9 @@ class PerigonAdapter(NewsProvider):
         articles = []
 
         for raw_article in response.articles:
-            print(raw_article)
             if not raw_article.title or not raw_article.url:
                 continue
-
+            print(raw_article.content)
             articles.append(
                 Article(
                     title=raw_article.title,

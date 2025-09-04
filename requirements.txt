@@ -14,4 +14,3 @@ eventregistry
 dotenv
 pytest
 pytest-mock
-logging
