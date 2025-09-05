@@ -8,5 +8,5 @@ jobs:
   call-docker-build:
     uses: newsByAI/genericWorkflows/.github/workflows/build-push.yml@main
     with:
-      IMAGE_NAME: "newsbyai"
+      IMAGE_NAME: "ai-backend"
     secrets: inherit
