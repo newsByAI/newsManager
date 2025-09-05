@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Reuse Test Workflow
 
 on:
   pull_request:
