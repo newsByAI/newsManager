@@ -56,7 +56,6 @@ class NewsAiApiAdapter(NewsProvider):
                 if not raw_article.get("title") or not raw_article.get("url"):
                     continue
                 # Map the fields from the API response to our internal Article model
-                print(raw_article.content)
                 articles.append(
                     Article(
                         title=raw_article.get("title"),
