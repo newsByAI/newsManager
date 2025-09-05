@@ -6,7 +6,7 @@ on:
 
 jobs:
   call-docker-build:
-    uses: newsByAI/genericWorkflows/.github/workflows/build-docker.yml@main
+    uses: newsByAI/genericWorkflows/.github/workflows/build-push.yml@main
     with:
       IMAGE_NAME: "newsByAI"
     secrets:
