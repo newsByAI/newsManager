@@ -1,0 +1,12 @@
+name: Reuse Docker Build Workflow
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  call-docker-build:
+    uses: newsByAI/genericWorkflows/.github/workflows/build-push.yml@main
+    with:
+      IMAGE_NAME: "newsByAI"
+    secrets: inherit
