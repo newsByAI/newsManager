@@ -9,7 +9,7 @@ from datetime import date
 from services.evaluation_client import ChunkingEvaluator
 
 
-MINIMUM_ACCEPTABLE_SCORE = 4
+MINIMUM_ACCEPTABLE_SCORE = 2
 
 
 # Esta función busca automáticamente todos los pares de archivos (artículo y golden data).

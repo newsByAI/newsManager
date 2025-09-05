@@ -1,0 +1,17 @@
+name: Reuse Test Workflow
+
+on:
+  pull_request:
+    branches: ["main"]  
+
+jobs:
+  
+  run-tests:
+    permissions:
+        contents: read
+        id-token: write
+    uses: newsByAI/genericWorkflows/.github/workflows/tests-python.yml@main
+    with:
+      PYTHON_VERSION: "3.11"
+    secrets:
+      GCP_PROJECT_ENUBE: ${{ secrets.GCP_PROJECT_ENUBE }}
