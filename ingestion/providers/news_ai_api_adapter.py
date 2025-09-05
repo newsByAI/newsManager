@@ -38,7 +38,7 @@ class NewsAiApiAdapter(NewsProvider):
         print(f"Searching for '{query}' using NewsAPI.ai...")
 
         # Construct the query to search for English news articles
-        q = QueryArticlesIter(keywords=query, lang="eng", dataType=["news"])
+        q = QueryArticlesIter(keywords=query, lang="eng", dataType=["news", "pr"])
 
         articles = []
         try:
@@ -46,9 +46,9 @@ class NewsAiApiAdapter(NewsProvider):
             # The SDK returns a generator, so we iterate through it
             response_articles = q.execQuery(
                 self.er_client,
-                sortBy="date",  
-                sortByAsc=False, 
-                maxItems=1,  
+                sortBy="date",
+                sortByAsc=False,
+                maxItems=10,
             )
 
             for raw_article in response_articles:
@@ -56,7 +56,6 @@ class NewsAiApiAdapter(NewsProvider):
                 if not raw_article.get("title") or not raw_article.get("url"):
                     continue
                 # Map the fields from the API response to our internal Article model
-                print(raw_article.content)
                 articles.append(
                     Article(
                         title=raw_article.get("title"),
