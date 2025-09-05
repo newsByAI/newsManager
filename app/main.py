@@ -1,4 +1,5 @@
 import os
+import re
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,6 +24,8 @@ origins = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
 ]
+
+origins.append(re.compile(r"https://frontend-.*\.run\.app"))
 
 domain_urls = os.getenv("DOMAIN_URL", "")
 if domain_urls:
