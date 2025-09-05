@@ -1,0 +1,13 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches: ["main"]  
+jobs:
+  run-tests:
+    uses: newsByAI/genericWorkflows/.github/workflows/tests-python.yml@main
+    with:
+      PYTHON_VERSION: "3.11"
+    secrets:
+      GCP_SA_IA_CREDENTIALS: ${{ secrets.GCP_SA_IA_CREDENTIALS }}
+      GCP_PROJECT_ENUBE: ${{ secrets.GCP_PROJECT_ENUBE }}
