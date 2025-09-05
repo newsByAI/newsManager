@@ -25,15 +25,16 @@ origins = [
     "http://127.0.0.1:8080",
 ]
 
-origins.append(re.compile(r"https://frontend-.*\.run\.app"))
 
 domain_urls = os.getenv("DOMAIN_URL", "")
+
 if domain_urls:
     origins += [url.strip() for url in domain_urls.split(",") if url.strip()]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,  # o usa ["*"] si no manejas credenciales
+    allow_origin_regex=r"^https://frontend-.*\.run\.app$",
     allow_credentials=True,  # pon True solo si usas cookies/autenticación de navegador
     allow_methods=["*"],  # GET, POST, etc.
     allow_headers=["*"],  # Authorization, Content-Type, etc.
