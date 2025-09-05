@@ -1,0 +1,30 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
+jobs:
+  # ----------- JOB 1: CONSTRUIR LA IMAGEN -----------
+  call-docker-build:
+    name: Build and Push Docker Image
+    uses: newsByAI/genericWorkflows/.github/workflows/build-push.yml@main
+    with:
+      IMAGE_NAME: "ai-backend" 
+    secrets: inherit 
+
+  # ----------- JOB 2: DESPLEGAR LA IMAGEN -----------
+  call-cloudrun-deploy:
+    name: Deploy to Cloud Run
+    needs: call-docker-build
+    uses: newsByAI/genericWorkflows/.github/workflows/deploy-cloud-run.yml@main
+    with:
+      GCP_REGION: ${{ vars.GCP_REGION }}
+      CLOUD_RUN_SERVICE: backend-default
+      DOCKER_IMAGE: "${{ vars.GCP_REGISTRY_ZONE }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ENUBE }}/${{ vars.REGISTRY }}/ai-backend:latest"
+    secrets: inherit
+
