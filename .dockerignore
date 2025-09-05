@@ -30,3 +30,4 @@ Thumbs.db
 database/docker-compose.yml
 database/init.sql
 docker-compose.yml
+test/
