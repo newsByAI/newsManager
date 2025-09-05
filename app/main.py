@@ -22,8 +22,11 @@ origins = [
     "http://127.0.0.1:5173",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
-    os.getenv("DOMAIN_URL"),
 ]
+
+domain_urls = os.getenv("DOMAIN_URL", "")
+if domain_urls:
+    origins += [url.strip() for url in domain_urls.split(",") if url.strip()]
 
 app.add_middleware(
     CORSMiddleware,
