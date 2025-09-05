@@ -16,6 +16,7 @@ venv/
 # Git
 .git
 .gitignore
+.github/
 
 # Byte-compiled / optimized / DLL files
 *.so

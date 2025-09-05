@@ -1,0 +1,14 @@
+name: Reuse Docker Build Workflow
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  call-docker-build:
+    uses: newsByAI/genericWorkflows/.github/workflows/build-docker.yml@main
+    with:
+      IMAGE_NAME: "newsByAI"
+    secrets:
+      GCP_SA_REGISTRY_MANAGER_CREDENTIALS: ${{ secrets.GCP_SA_REGISTRY_MANAGER_CREDENTIALS }}
+      GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
