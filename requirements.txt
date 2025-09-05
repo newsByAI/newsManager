@@ -12,5 +12,3 @@ psycopg2-binary
 perigon
 eventregistry
 dotenv
-pytest
-pytest-mock
